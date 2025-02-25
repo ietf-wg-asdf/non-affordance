@@ -1,11 +1,20 @@
-# Semantic Definition Format (SDF) modeling for Digital Twin
+# ASDF Drafts
 
-This is the working area for the individual Internet-Draft, "Semantic Definition Format (SDF) modeling for Digital Twin".
+This is the working area for IETF [ASDF Working Group](https://datatracker.ietf.org/group/asdf/documents/) Internet-Drafts.
+
+## TODO - Your title
+
+* [Editor's Copy](https://ietf-wg-asdf.github.io/non-affordance/#go.draft-ietf-asdf-sdf-nonaffordance.html)
+* [Datatracker Page](https://datatracker.ietf.org/doc/draft-ietf-asdf-sdf-nonaffordance)
+* [Working Group Draft](https://datatracker.ietf.org/doc/html/draft-ietf-asdf-sdf-nonaffordance)
+* [Compare Editor's Copy to Working Group Draft](https://ietf-wg-asdf.github.io/non-affordance/#go.draft-ietf-asdf-sdf-nonaffordance.diff)
+
+## Semantic Definition Format (SDF) modeling for Digital Twin
 
 * [Editor's Copy](https://ietf-wg-asdf.github.io/non-affordance/#go.draft-lee-asdf-digital-twin.html)
 * [Datatracker Page](https://datatracker.ietf.org/doc/draft-lee-asdf-digital-twin)
-* [Individual Draft](https://datatracker.ietf.org/doc/html/draft-lee-asdf-digital-twin)
-* [Compare Editor's Copy to Individual Draft](https://ietf-wg-asdf.github.io/non-affordance/#go.draft-lee-asdf-digital-twin.diff)
+* [Working Group Draft](https://datatracker.ietf.org/doc/html/draft-lee-asdf-digital-twin)
+* [Compare Editor's Copy to Working Group Draft](https://ietf-wg-asdf.github.io/non-affordance/#go.draft-lee-asdf-digital-twin.diff)
 
 
 ## Contributing
