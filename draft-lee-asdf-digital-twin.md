@@ -201,8 +201,7 @@ And the others, for example location, can be described using sdfNonAffordance.
 {: toc="default"}
 
 The architecture of a digital twin based on the SDF model is illustrated
-in {{basic-arch-fig}},
-, following the guidelines of {{ISO23247-3}}.
+in {{basic-arch-fig}}, following the guidelines of {{ISO23247-3}}.
 
 The Physical Layer comprises affordance and non-affordance objects. From
 the real-world objects,
