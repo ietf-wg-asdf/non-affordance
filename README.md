@@ -1,13 +1,30 @@
-# Internet-Draft Template Repository
+# Semantic Definition Format (SDF) modeling for Digital Twin
 
-Use this repository as a template if you want to start working on
-[IETF](https://www.ietf.org/) documents. [Click here to create a new repository using the
-template](https://github.com/martinthomson/internet-draft-template/generate).
-Make sure to check "Include all branches", or you will need to enable GitHub Pages manually.
+This is the working area for the individual Internet-Draft, "Semantic Definition Format (SDF) modeling for Digital Twin".
 
-[Read the
-instructions](https://github.com/martinthomson/i-d-template/blob/main/doc/TEMPLATE.md)
-for more information.
+* [Editor's Copy](https://ietf-wg-asdf.github.io/non-affordance/#go.draft-lee-asdf-digital-twin.html)
+* [Datatracker Page](https://datatracker.ietf.org/doc/draft-lee-asdf-digital-twin)
+* [Individual Draft](https://datatracker.ietf.org/doc/html/draft-lee-asdf-digital-twin)
+* [Compare Editor's Copy to Individual Draft](https://ietf-wg-asdf.github.io/non-affordance/#go.draft-lee-asdf-digital-twin.diff)
 
-Once you have created your own repository, start work by
-[renaming the `draft-todo-yourname-protocol.md` file](../../edit/main/draft-todo-yourname-protocol.md).
+
+## Contributing
+
+See the
+[guidelines for contributions](https://github.com/ietf-wg-asdf/non-affordance/blob/main/CONTRIBUTING.md).
+
+Contributions can be made by creating pull requests.
+The GitHub interface supports creating pull requests using the Edit (✏) button.
+
+
+## Command Line Usage
+
+Formatted text and HTML versions of the draft can be built using `make`.
+
+```sh
+$ make
+```
+
+Command line usage requires that you have the necessary software installed.  See
+[the instructions](https://github.com/martinthomson/i-d-template/blob/main/doc/SETUP.md).
+

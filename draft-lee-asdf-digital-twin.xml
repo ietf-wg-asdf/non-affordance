@@ -16,7 +16,7 @@
 <rfc ipr="trust200902" docName="draft-lee-asdf-digital-twin-latest" category="std" submissionType="IETF" tocInclude="true" sortRefs="true" symRefs="true">
   <front>
     <title abbrev="SDF modeling for digital twin">Semantic Definition Format (SDF) modeling for Digital Twin</title>
-    <seriesInfo name="Internet-Draft" value="draft-lee-asdf-digital-twin-06"/>
+    <seriesInfo name="Internet-Draft" value="draft-lee-asdf-digital-twin-latest"/>
 
     <author fullname="Hyunjeong Lee" role="editor" initials="H." surname="Lee">
         <organization abbrev="ETRI">Electronics and Telecommunications Research Institute</organization>
