@@ -1,0 +1,95 @@
+{
+  "magic": "E!vIA5L86J2I",
+  "timestamp": "2025-02-27T01:17:49.779569+00:00",
+  "repo": "ietf-wg-asdf/non-affordance",
+  "labels": [
+    {
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+    },
+    {
+      "name": "documentation",
+      "description": "Improvements or additions to documentation",
+      "color": "0075ca"
+    },
+    {
+      "name": "duplicate",
+      "description": "This issue or pull request already exists",
+      "color": "cfd3d7"
+    },
+    {
+      "name": "enhancement",
+      "description": "New feature or request",
+      "color": "a2eeef"
+    },
+    {
+      "name": "good first issue",
+      "description": "Good for newcomers",
+      "color": "7057ff"
+    },
+    {
+      "name": "help wanted",
+      "description": "Extra attention is needed",
+      "color": "008672"
+    },
+    {
+      "name": "invalid",
+      "description": "This doesn't seem right",
+      "color": "e4e669"
+    },
+    {
+      "name": "question",
+      "description": "Further information is requested",
+      "color": "d876e3"
+    },
+    {
+      "name": "wontfix",
+      "description": "This will not be worked on",
+      "color": "ffffff"
+    }
+  ],
+  "issues": [],
+  "pulls": [
+    {
+      "number": 1,
+      "id": "PR_kwDON_Xrm86Mgnb5",
+      "title": "XML to markdown",
+      "url": "https://github.com/ietf-wg-asdf/non-affordance/pull/1",
+      "state": "OPEN",
+      "author": "cabo",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-02-25T17:34:03Z",
+      "updatedAt": "2025-02-25T17:35:57Z",
+      "baseRepository": "ietf-wg-asdf/non-affordance",
+      "baseRefName": "main",
+      "baseRefOid": "bb344e96a3da556d94eb499b376f641e84bfa637",
+      "headRepository": "cabo/non-affordance",
+      "headRefName": "to-markdown",
+      "headRefOid": "58dd6b63f9815203a0c30ba10ea780d492b2b864",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDON_Xrm86deNWC",
+          "commit": {
+            "abbreviatedOid": "efbadd8"
+          },
+          "author": "mcr",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-02-25T17:35:35Z",
+          "updatedAt": "2025-02-25T17:35:35Z",
+          "comments": []
+        }
+      ]
+    }
+  ]
+}
