@@ -2,7 +2,7 @@
 
 This is the working area for IETF [ASDF Working Group](https://datatracker.ietf.org/group/asdf/documents/) Internet-Drafts.
 
-## TODO - Your title
+## Semantic Definition Format (SDF) Extension for Non-Affordance Information
 
 * [Editor's Copy](https://ietf-wg-asdf.github.io/non-affordance/#go.draft-ietf-asdf-sdf-nonaffordance.html)
 * [Datatracker Page](https://datatracker.ietf.org/doc/draft-ietf-asdf-sdf-nonaffordance)
