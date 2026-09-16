@@ -10,7 +10,7 @@ Expires: 20 March 2027                                 16 September 2026
 
      Semantic Definition Format (SDF) Extension for Non-Affordance
                               Information
-                  draft-ietf-asdf-sdf-nonaffordance-05
+                draft-ietf-asdf-sdf-nonaffordance-latest
 
 Abstract
 
