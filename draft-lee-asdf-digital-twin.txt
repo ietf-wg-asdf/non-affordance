@@ -5,11 +5,11 @@
 ASDF Working Group                                           H. Lee, Ed.
 Internet-Draft                                                   J. Hong
 Intended status: Standards Track                                    ETRI
-Expires: 29 August 2025                                        J-S. Youn
+Expires: 20 March 2027                                         J-S. Youn
                                                            Dong-eui Univ
                                                                Y-G. Hong
                                                       Daejeon University
-                                                        25 February 2025
+                                                       16 September 2026
 
 
        Semantic Definition Format (SDF) modeling for Digital Twin
@@ -41,11 +41,11 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 29 August 2025.
+   This Internet-Draft will expire on 20 March 2027.
 
 Copyright Notice
 
-   Copyright (c) 2025 IETF Trust and the persons identified as the
+   Copyright (c) 2026 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
 
    This document is subject to BCP 78 and the IETF Trust's Legal

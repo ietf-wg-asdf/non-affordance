@@ -2,33 +2,23 @@
 
 
 
-ASDF                                                          Y. N. Here
-Internet-Draft                                    Your Organization Here
-Intended status: Informational                          25 February 2025
-Expires: 29 August 2025
+ASDF                                                        J. Hong, Ed.
+Internet-Draft                                                    H. Lee
+Intended status: Standards Track                                    ETRI
+Expires: 20 March 2027                                 16 September 2026
 
 
-                           TODO - Your title
-                draft-ietf-asdf-sdf-nonaffordance-latest
+     Semantic Definition Format (SDF) Extension for Non-Affordance
+                              Information
+                  draft-ietf-asdf-sdf-nonaffordance-05
 
 Abstract
 
-   TODO Abstract
-
-About This Document
-
-   This note is to be removed before publishing as an RFC.
-
-   Status information for this document may be found at
-   https://datatracker.ietf.org/doc/draft-ietf-asdf-sdf-nonaffordance/.
-
-   Discussion of this document takes place on the ASDF Working Group
-   mailing list (mailto:asdf@ietf.org), which is archived at
-   https://mailarchive.ietf.org/arch/browse/asdf/.  Subscribe at
-   https://www.ietf.org/mailman/listinfo/asdf/.
-
-   Source for this draft and an issue tracker can be found at
-   https://github.com/ietf-wg-asdf/non-affordance.
+   This document describes an extension to the Semantic Definition
+   Format (SDF) for representing non-affordance information of Things,
+   such as physical, contextual, and descriptive metadata.  This
+   extension introduces a new class keyword, sdfContext, that enables
+   comprehensive modeling of Things and improves semantic clarity.
 
 Status of This Memo
 
@@ -45,11 +35,11 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 29 August 2025.
+   This Internet-Draft will expire on 20 March 2027.
 
 Copyright Notice
 
-   Copyright (c) 2025 IETF Trust and the persons identified as the
+   Copyright (c) 2026 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -64,34 +54,775 @@ Copyright Notice
 Table of Contents
 
    1.  Introduction
-   2.  Conventions and Definitions
-   3.  Security Considerations
-   4.  IANA Considerations
-   5.  Normative References
-   Acknowledgments
-   Author's Address
+   2.  Terminology and Conventions
+   3.  Motivation and Use Cases
+     3.1.  Motivation
+     3.2.  Use Cases
+       3.2.1.  Asset Management and Tracking
+       3.2.2.  Environmental Context Awareness
+       3.2.3.  Regulatory Compliance and Certification
+   4.  SDF Extension for Non-Affordance Information
+     4.1.  Static Model Definition (sdfContext)
+       4.1.1.  Comparison Between sdfContext and sdfProperty
+       4.1.2.  Practical Use Cases for sdfContext
+       4.1.3.  Using sdfType "link" for External Resource References
+     4.2.  Run-Time Context Messages
+       4.2.1.  contextSnapshot Message
+       4.2.2.  identityManifest Message
+       4.2.3.  contextPatch Message
+   5.  Security Considerations
+   6.  IANA Considerations
+   7.  Normative References
+   8.  Informative References
+   Authors' Addresses
 
 1.  Introduction
 
-   TODO Introduction
+   The Semantic Definition Format (SDF) standardizes the representation
+   of affordances of Things, namely Properties, Actions, and Events
+   [RFC9880].  However, SDF does not currently define a way to represent
+   non-affordance information, such as location, contextual metadata,
+   identifiers, and other descriptive elements that are not directly
+   related to device interactions.  The absence of such constructs
+   limits the ability to model devices and systems in use cases that
+   require both interactive behavior and descriptive metadata.
 
-2.  Conventions and Definitions
+   This document specifies an extension to SDF to represent non-
+   affordance information in a consistent and interoperable way.  The
+   extension is introduced as a new class keyword, sdfContext, defined
+   alongside the existing affordance classes, and provides a mechanism
+   for expressing descriptive information that complements interactive
+   definitions.
+
+2.  Terminology and Conventions
 
    The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
    "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
-   "OPTIONAL" in this document are to be interpreted as described in
-   BCP 14 [RFC2119] [RFC8174] when, and only when, they appear in all
+   "OPTIONAL" in this document are to be interpreted as described in BCP
+   14 [RFC2119] [RFC8174] when, and only when, they appear in all
    capitals, as shown here.
 
-3.  Security Considerations
+   This document uses the SDF terminology defined in Section 1.2 of
+   [RFC9880], in particular the terms Class Name Keyword, Class,
+   Quality, Definition, Declaration, Grouping, and Affordance.  In
+   addition, the following term is used in this document:
 
-   TODO Security
+   Non-Affordance:  information about a Thing that is not directly
+      related to its interactive capabilities.  Non-affordance
+      information does not define how external entities can act upon the
+      Thing, but instead provides descriptive metadata useful for
+      interpretation, management, or integration.  Examples include
+      location, manufacturer details, calibration parameters, or
+      deployment context.
 
-4.  IANA Considerations
+3.  Motivation and Use Cases
 
-   This document has no IANA actions.
+   The integration of non-affordance information into the Semantic
+   Definition Format (SDF) addresses several critical needs in the
+   modeling of Internet of Things (IoT) devices.  The key motivations
+   and corresponding use cases in the following subsections illustrate
+   the importance of this extension.
 
-5.  Normative References
+3.1.  Motivation
+
+   In the current SDF framework, the primary focus is on defining
+   affordances (interactive elements such as Properties, Actions, and
+   Events).  While this approach effectively captures the dynamic
+   capabilities of a Thing, it overlooks essential non-interactive
+   attributes that are vital for a comprehensive device representation.
+   These non-affordance attributes encompass contextual information and
+   descriptive metadata, including dimensions, weight, location,
+   manufacturer details, and operational constraints.  The absence of a
+   standardized representation for such static information can lead to
+   fragmented device models, hindering interoperability and seamless
+   integration across diverse IoT ecosystems.  Although it is
+   technically possible to model such information using sdfProperty,
+   this approach introduces several forms of semantic confusion:
+
+   1.  Users may misinterpret the field as observable or interactive:
+       When interactive properties (e.g., sensor readings or actuators)
+       and fixed attributes (e.g., a device's physical dimensions or
+       serial number) are all represented as properties, it becomes
+       unclear which elements are meant to change or be acted upon and
+       which are immutable context.  This ambiguity forces developers
+       and tools to infer intent manually, making models harder to
+       interpret and maintain.  Over time, such models require extra
+       documentation and care to ensure that static fields are not
+       mistakenly treated as dynamic, adding to the maintenance burden.
+
+   2.  Developers may implement unnecessary run-time I/O interfaces:
+       Many IoT frameworks and tools automatically create API handlers
+       (e.g., REST endpoints or CoAP resources) for each defined
+       Property.  If static metadata like a device's model name or
+       install location is modeled as a property, a tool might
+       erroneously generate read/write accessors for it.  This is
+       problematic because such metadata is meant to be read-only
+       context, not an interactive affordance.  The result is
+       superfluous or misleading interface endpoints that do not reflect
+       the device's real capabilities, potentially causing confusion or
+       security issues.  In short, using sdfProperty for static fields
+       violates the expectation that those fields remain non-
+       interactive, since the default affordance treatment would imply
+       they can be polled or even written to.
+
+   3.  Tools and UIs may treat static metadata as operational data: SDF
+       is meant to clearly convey a Thing's interactive capabilities
+       versus its contextual attributes.  When both are blended under
+       the same construct, developers and automated tools may
+       misinterpret the purpose of a given field.  For example, a field
+       representing location or manufacturer might be misconstrued as an
+       operational parameter rather than informative metadata.  This
+       blurring of semantics makes it harder to build consistent tooling
+       and to map SDF models to platform implementations, since one
+       cannot reliably distinguish which elements require interactive
+       handling.  In essence, the lack of separation between affordances
+       and non-affordances dilutes the semantic clarity of SDF models,
+       undermining the SDF goal of an unambiguous, self-descriptive
+       device model.
+
+   To address these concerns, this document introduces sdfContext as a
+   dedicated top-level keyword to define static, descriptive, and non-
+   interactive metadata.  This construct enables a clear semantic
+   distinction from sdfProperty, making the data model more expressive,
+   machine-readable, and robust to implementation assumptions.
+
+   While the primary focus of this document is the introduction of a
+   static model extension via sdfContext, practical use of such metadata
+   in real-world deployments often requires run-time mechanisms for
+   metadata exchange.  Use cases such as device onboarding, dynamic
+   environment configuration, and regulatory audits benefit from the
+   ability to transmit static context data as part of operational
+   protocols.  To that end, this document also introduces optional run-
+   time messages (contextSnapshot, identityManifest, and contextPatch)
+   that can convey non-affordance attributes at appropriate times.
+
+   These messages are not the core of the SDF extension but are
+   essential for practical interoperability, especially in systems where
+   device metadata needs to be programmatically discovered, validated,
+   or synchronized.  Their inclusion supports real-world use cases that
+   rely on the seamless integration of descriptive metadata into
+   operational contexts.  Thus, the proposal reflects both a modeling
+   advancement for SDF and a run-time integration pattern to enable
+   widespread adoption.  This design accommodates ecosystem-specific
+   metadata such as regulatory certifications, deployment regions, or
+   vendor-specific constraints by allowing flexible attributes to be
+   included and mapped according to the needs of each ecosystem.
+
+3.2.  Use Cases
+
+   This section illustrates how non-affordance information modeled via
+   sdfContext, contextSnapshot, identityManifest, and contextPatch
+   supports interoperability, lifecycle traceability, and accurate
+   interpretation of data across domains.
+
+   By integrating non-affordance information into SDF as described in
+   the following use cases, a more holistic device model can be
+   achieved: one that enhances interoperability, operational efficiency,
+   and compliance across diverse IoT applications.
+
+3.2.1.  Asset Management and Tracking
+
+   Scenario:  In logistics and warehouse systems, physical containers
+      and pallets are often equipped with IoT sensors to monitor
+      conditions such as temperature, vibration, and location.  In
+      addition, each container possesses immutable physical attributes
+      (such as size, weight, manufacturer, and maximum load capacity)
+      that directly influence deployment, transportation, and regulatory
+      compliance.
+
+   Concrete Example:  For instance, a 20-foot shipping container
+      manufactured in August 2025 would be registered with length,
+      width, height, manufacturer name, and maximum permitted load,
+      which never change throughout its lifecycle.  These non-affordance
+      data fields are recorded using sdfContext and are referenced
+      whenever containers are assigned to shipping routes, loaded with
+      cargo, or inspected by authorities.
+
+   Data Flow:  During onboarding, these static attributes are retrieved
+      from the device's digital representation or management registry
+      and stored in the asset management system, enabling automated
+      planning and compliance checks.  Because they are immutable, they
+      prevent errors in cargo assignment and support maintenance audits.
+      If placement or ownership changes are required, an update can be
+      provided using a contextPatch message without altering the
+      interactive model.
+
+   Value of Separation:  By distinguishing non-affordance metadata from
+      dynamic sensor properties, the SDF model ensures that static
+      context is protected against accidental modification, enhancing
+      system reliability and regulatory integrity.
+
+3.2.2.  Environmental Context Awareness
+
+   Scenario:  Environmental sensors in smart buildings, such as
+      temperature sensors or CO2 monitors, are installed across diverse
+      locations (such as underground ventilation ducts or third-floor
+      windows), which dramatically affect how sensor values should be
+      interpreted.
+
+   Concrete Example:  A motion sensor installed on the ceiling of a
+      conference room on the third floor would declare floor: 3,
+      mountType: ceiling, and indoorOutdoor: indoor in its sdfContext.
+      This static context enables analytics tools to filter and adjust
+      real-time readings, for instance distinguishing between typical
+      fluctuations due to conference room activity versus anomalies that
+      indicate faults.
+
+   Data Flow:  At installation, the deployment technician registers this
+      context information; during operation, a contextSnapshot message
+      provides complete context to facility management systems and
+      enables energy optimization or fault detection algorithms to
+      adjust thresholds and logic based on known placement.  This aligns
+      with the instance-level snapshot structure discussed in
+      [I-D.ietf-asdf-instance-information], limited to static contextual
+      data.
+
+   Value of Separation:  Separating static environmental context from
+      dynamic sensor data streamlines calibration, reduces errors in
+      data interpretation, and enables automated system adaptation to
+      environmental changes without manual oversight.
+
+3.2.3.  Regulatory Compliance and Certification
+
+   Scenario:  In regulated environments such as healthcare, aviation, or
+      industrial automation, each device must report immutable
+      identification (manufacturer, model, production date) and
+      traceable certification information to governing authorities and
+      compliance systems.
+
+   Concrete Example:  Upon commissioning a hospital-grade infusion pump,
+      its sdfContext includes manufacturer, model, firmwareVersion, and
+      a set of certification records (for example, FDA certification ID,
+      CE mark, and regulatory region).  These remain unchanged during
+      operational use and appear in device management dashboards, audit
+      logs, and automated compliance reporting workflows.
+
+   Data Flow:  identityManifest messages are sent during device
+      onboarding and updates, often as the output of a construction or
+      commissioning process, verifying compliance status.  Regulatory
+      systems query these static records to check policy enforcement,
+      recall campaigns, and security patch eligibility.
+
+   Value of Separation:  Non-affordance identity and certification data,
+      managed as immutable context, guarantee regulatory and operational
+      traceability and prevent unauthorized device modifications,
+      forming the backbone of trustworthy automated compliance.
+
+4.  SDF Extension for Non-Affordance Information
+
+   In the SDF, the primary focus has been on defining affordances
+   (interactive elements such as Properties, Actions, and Events) that
+   specify how external entities can interact with a Thing.  However,
+   SDF does not provide a construct to represent non-affordance
+   information, which covers attributes not directly related to
+   interaction but needed to describe a Thing's context and
+   characteristics.
+
+   This section specifies how non-affordance information is added to an
+   SDF model and how that information can be exchanged at run time.  The
+   description is split into two complementary subsections:
+
+   *  Section 4.1 shows how contextual metadata is embedded directly in
+      the SDF document under the new sdfContext class.  These
+      definitions are authored once, validated like any other SDF schema
+      fragment, and travel with the model wherever it is stored or
+      published.
+
+   *  Section 4.2 introduces three JSON envelopes (contextSnapshot,
+      identityManifest, and contextPatch) that let a deployed device or
+      its digital twin report changes to that metadata over time.
+      Keeping these messages outside the affordance model preserves the
+      core principle that non-affordance data is descriptive, not
+      interactive, while still allowing systems to keep the context up
+      to date.
+
+   To address this need, this document introduces a new Class Name
+   Keyword, sdfContext.  Base SDF defines six Class Name Keywords
+   (Section 1.2.3 of [RFC9880]); sdfContext is added as a peer of the
+   affordance keywords sdfProperty, sdfAction, and sdfEvent, and is used
+   to represent non-affordance information when authoring the SDF model
+   (i.e., at design time).  Examples include location, manufacturer
+   details, calibration parameters, installation attributes, and static
+   identifiers.
+
+   An sdfContext group can occur in an sdfObject definition (Section 5.1
+   of [RFC9880]) and in an sdfThing definition (Section 6.3 of
+   [RFC9880]), extending the content model of these Groupings, which in
+   base SDF contain Affordance declarations only.  Entries under
+   sdfContext are not Affordances; they do not take part in interaction
+   protocols and are read-only in any generated interface.
+
+   Ecosystem-specific details can alternatively be layered onto an SDF
+   model by an Augmentation Mechanism (Section 1.2.3 of [RFC9880]); SDF
+   mapping files [I-D.ietf-asdf-sdf-mapping] provide a way to augment a
+   base model with additional qualities or metadata.  The sdfContext
+   extension defined in this document complements that approach by
+   providing a first-class construct within the model for static
+   context, ensuring that such metadata is uniformly available and
+   semantically distinguished in the core specification of a Thing.
+
+   The qualities of an sdfContext definition are the data qualities
+   defined in Section 4.7 ("Data Qualities") of [RFC9880], which in turn
+   include the common qualities of Section 4.6 ("Common Qualities") of
+   [RFC9880].  Table 1 summarizes the qualities that are most relevant
+   for non-affordance information.  None of these qualities are required
+   or have default values that are assumed if the quality is absent.
+
+     +==========+=======+============================================+
+     | Quality  | Type  | Description                                |
+     +==========+=======+============================================+
+     | (common) | -     | See Section 4.6 ("Common Qualities") of    |
+     |          |       | [RFC9880], including description and label |
+     +----------+-------+--------------------------------------------+
+     | (data)   | -     | See Section 4.7 ("Data Qualities") of      |
+     |          |       | [RFC9880], including type, unit,           |
+     |          |       | contentFormat, sdfType, and enum           |
+     +----------+-------+--------------------------------------------+
+     | const    | (as   | Fixed value of the context entry, for      |
+     |          | per   | information that is already known when the |
+     |          | type) | model is authored or provisioned           |
+     +----------+-------+--------------------------------------------+
+
+                Table 1: SDF-defined Qualities of sdfContext
+
+   Practical scenarios where sdfContext may be applied include:
+
+   *  Asset Management: associating static metadata such as
+      manufacturing date, supplier, or warranty information with a
+      device in a fleet.
+
+   *  Commissioning Tools: storing parameters injected during deployment
+      (e.g., room assignment, installation coordinates) that are not
+      otherwise observable through interactive affordances.
+
+   *  Calibration Metadata: describing accuracy classes or calibration
+      factors used by the device when reporting measurements.  These
+      values are typically read-only and not exposed via a protocol
+      interface.
+
+   *  Identity and Traceability: capturing serial numbers, SKU
+      identifiers, or web resource references that uniquely characterize
+      a device but remain constant throughout its lifecycle.
+
+   The following example defines an sdfObject that contains both an
+   affordance and several non-affordance attributes.  The affordance is
+   represented as a temperature property, which is a numeric value in
+   degrees Celsius.  The non-affordance attributes are grouped under
+   sdfContext.  These include a serialNumber, which is a factory-
+   assigned identifier; an installationLocation, which indicates where
+   the device is deployed within a building; and a calibrationOffset,
+   which specifies a correction value applied to raw sensor
+   measurements.  Together, these definitions illustrate how sdfContext
+   can capture descriptive metadata that is not directly interactive but
+   still essential for interpretation and integration.
+
+   {
+     "sdfObject": {
+       "deviceWithContext": {
+         "sdfProperty": {
+           "temperature": {
+             "type": "number",
+             "unit": "°C"
+           }
+         },
+         "sdfContext": {
+           "serialNumber": {
+             "type": "string",
+             "description": "Unique factory-assigned identifier"
+           },
+           "installationLocation": {
+             "type": "string",
+             "description": "Installation location in the building"
+           },
+           "calibrationOffset": {
+             "type": "number",
+             "unit": "°C",
+             "description": "Offset applied to raw measurements"
+           }
+         }
+       }
+     }
+   }
+
+       Figure 1: SDF Object containing a Property and a Context entry
+
+   To align with the use cases described in Section 3.2, this section
+   introduces detailed examples of non-affordance information modeling
+   using the sdfContext construct.  Each subsection demonstrates how
+   contextual metadata can be represented in an SDF model corresponding
+   to a specific use case.
+
+4.1.  Static Model Definition (sdfContext)
+
+   The sdfContext keyword denotes a group of zero or more Context
+   definitions.  A Context definition is a named set of data qualities,
+   as are sdfData and sdfProperty definitions (Section 4.7 of
+   [RFC9880]).
+
+   The sdfContext class is intended for non-affordance information that
+   is static or metadata-oriented.  These are values that are expected
+   to be known at design time, provisioned at deployment time, or
+   extracted from static documentation or identity stores.  Examples
+   include manufacturer name, model number, location of deployment, or
+   contact email for support.
+
+4.1.1.  Comparison Between sdfContext and sdfProperty
+
+   Although both sdfProperty and sdfContext may describe characteristics
+   of a Thing, they differ fundamentally in purpose, mutability, and
+   system interaction behavior.  Table 2 summarizes these differences.
+
+    +================+=======================+========================+
+    | Aspect         | sdfProperty           | sdfContext             |
+    +================+=======================+========================+
+    | Purpose        | Represents observable | Represents static      |
+    |                | or modifiable         | descriptive            |
+    |                | affordances           | information            |
+    +----------------+-----------------------+------------------------+
+    | Mutability     | Typically mutable or  | Immutable after        |
+    |                | changeable over time  | deployment             |
+    +----------------+-----------------------+------------------------+
+    | Protocol       | Generates REST/CoAP/  | Does not generate      |
+    | Mapping        | other interface       | interactive endpoints  |
+    |                | endpoints             |                        |
+    +----------------+-----------------------+------------------------+
+    | UI             | Interactive elements  | Read-only fields       |
+    | Representation | (sliders, inputs)     | (labels, metadata      |
+    |                |                       | panels)                |
+    +----------------+-----------------------+------------------------+
+    | Tooling        | Polled, observed, or  | Displayed statically;  |
+    | Behavior       | updated via APIs      | excluded from          |
+    |                |                       | interaction logic      |
+    +----------------+-----------------------+------------------------+
+    | Migration      | N/A                   | Use if: (1) immutable, |
+    | Criteria       |                       | (2) non-pollable, (3)  |
+    |                |                       | descriptive            |
+    +----------------+-----------------------+------------------------+
+
+             Table 2: Comparison of sdfProperty and sdfContext
+
+   The distinction between sdfProperty and sdfContext is important for
+   toolchain behavior, interface generation, and user interface clarity.
+   While both may contain descriptive data, sdfProperty is intended for
+   values that are dynamic, observable, or settable at run time.  In
+   contrast, sdfContext is reserved for metadata that is immutable after
+   deployment and does not participate in interaction protocols.
+
+   For example, a sensor's temperature reading should be modeled as an
+   sdfProperty since it changes over time and clients may want to poll
+   or subscribe to it.  However, a serial number or installation date
+   should be modeled as sdfContext, as these are assigned once and do
+   not change or require polling.
+
+   From an implementation perspective, tools MUST NOT generate GET/PUT
+   endpoints for sdfContext, and UI frameworks SHOULD render these
+   values as static labels or metadata panels.  If an existing model
+   contains sdfProperty entries that are read-only and represent
+   metadata, they MAY be migrated to sdfContext for semantic clarity.
+
+4.1.2.  Practical Use Cases for sdfContext
+
+   This section presents SDF examples that statically describe non-
+   affordance information associated with different types of devices and
+   use cases.  Each example corresponds to a use case described in
+   Section 3.2.
+
+4.1.2.1.  Example: Asset Management and Tracking
+
+   The following example corresponds to the use case in Section 3.2.1.
+   It models static metadata for a shipping container, including
+   physical dimensions and capacity.
+
+   {
+     "sdfObject": {
+       "assetContainer": {
+         "description": "Shipping container with embedded sensors",
+         "sdfContext": {
+           "physicalSpecs": {
+             "description": "Physical dimensions and capacity",
+             "type": "object",
+             "properties": {
+               "length": { "type": "number", "unit": "m" },
+               "width": { "type": "number", "unit": "m" },
+               "height": { "type": "number", "unit": "m" },
+               "maxLoadKg": { "type": "number", "unit": "kg" }
+             },
+             "required": ["length", "width", "height", "maxLoadKg"]
+           },
+           "location": {
+             "type": "object",
+             "properties": {
+               "lat": { "type": "number" },
+               "lon": { "type": "number" }
+             }
+           }
+         }
+       }
+     }
+   }
+
+              Figure 2: Asset Management and Tracking Example
+
+4.1.2.2.  Example: Environmental Context Awareness
+
+   This example corresponds to Section 3.2.2.  It describes
+   installation-related metadata for a building-mounted environmental
+   sensor.
+
+   {
+     "sdfObject": {
+       "envSensor": {
+         "description": "Environmental sensor unit",
+         "sdfContext": {
+           "installationInfo": {
+             "type": "object",
+             "properties": {
+               "floor": { "type": "integer" },
+               "mountType": {
+                 "type": "string",
+                 "enum": ["wall", "ceiling", "window"]
+               },
+               "indoorOutdoor": {
+                 "type": "string",
+                 "enum": ["indoor", "outdoor"]
+               }
+             },
+             "required": ["floor", "mountType"]
+           }
+         }
+       }
+     }
+   }
+
+             Figure 3: Environmental Context Awareness Example
+
+4.1.2.3.  Example: Regulatory Compliance and Certification
+
+   Aligned with Section 3.2.3, the following SDF model defines immutable
+   identity and certification data of a regulated device.
+
+   {
+     "sdfThing": {
+       "deviceMetadata": {
+         "sdfContext": {
+           "identity": {
+             "type": "object",
+             "properties": {
+               "manufacturer": { "type": "string" },
+               "model": { "type": "string" },
+               "firmwareVersion": { "type": "string" }
+             }
+           },
+           "certifications": {
+             "type": "array",
+             "items": {
+               "type": "object",
+               "properties": {
+                 "scheme": { "type": "string" },
+                 "certId": { "type": "string" },
+                 "region": { "type": "string" }
+               }
+             }
+           }
+         }
+       }
+     }
+   }
+
+         Figure 4: Regulatory Compliance and Certification Example
+
+4.1.3.  Using sdfType "link" for External Resource References
+
+   Some context entries do not carry a value of their own but point to
+   an external resource, such as a manufacturer datasheet, a
+   certification document, or a digital twin instance hosted on another
+   platform.  Such entries are modeled with the sdfType "link" defined
+   in [I-D.ietf-asdf-sdftype-link], which models an abstract
+   serialization of a Web Link [RFC8288] as an SDF data definition.
+
+   As specified in [I-D.ietf-asdf-sdftype-link], a definition using
+   sdfType "link" is used with the SDF type "object".  The members of
+   that object are named after the link parameter (attribute) names of
+   [RFC8288], and the special member name href carries the link target.
+   Attribute names and link relation type names are case-insensitive in
+   [RFC8288] and, as required by [I-D.ietf-asdf-sdftype-link], are used
+   in their lowercase form.
+
+   Only the link parameters that the model constrains need to be
+   declared.  A context entry that identifies an external resource
+   declares href alone; further parameters, such as a link relation type
+   or a media type, can be added where the model constrains them, and
+   the const quality can be used to pin a parameter whose value is fixed
+   when the model is authored.
+
+   The following example defines three external references in the
+   sdfContext of a device.  Each entry is an object-typed definition
+   with sdfType "link" and declares href as the link target; the
+   description quality carries the human-readable explanation of what
+   the link points to.
+
+   *  datasheetLink: the manufacturer's datasheet, which typically
+      contains technical specifications, electrical parameters, and
+      physical characteristics of the device.
+
+   *  certificationLink: a publicly accessible certification document
+      such as a safety approval (e.g., CE, FCC) or a compliance report.
+
+   *  digitalTwinLink: an external digital twin instance of the device,
+      typically hosted in a cloud-based platform or digital thread
+      system, used for visualization, monitoring, or synchronization
+      [I-D.ietf-asdf-digital-twin].
+
+   {
+     "sdfContext": {
+       "datasheetLink": {
+         "type": "object",
+         "sdfType": "link",
+         "description": "Link to the manufacturer's datasheet",
+         "properties": {
+           "href": {
+             "type": "string"
+           }
+         }
+       },
+       "certificationLink": {
+         "type": "object",
+         "sdfType": "link",
+         "description": "Link to the product safety certification",
+         "properties": {
+           "href": {
+             "type": "string"
+           }
+         }
+       },
+       "digitalTwinLink": {
+         "type": "object",
+         "sdfType": "link",
+         "description": "Link to an external digital twin",
+         "properties": {
+           "href": {
+             "type": "string"
+           }
+         }
+       }
+     }
+   }
+
+          Figure 5: Examples of using sdfType "link" in sdfContext
+
+   Where an ecosystem already publishes a link definition, the sdfRef
+   quality (Section 4.4 of [RFC9880]) can be used to reuse that
+   definition instead of repeating the link parameters in every model;
+   [I-D.ietf-asdf-sdftype-link] gives examples of this pattern.  Link
+   parameters specific to constrained environments are discussed in
+   [RFC6690].
+
+   These entries are not exposed through run-time protocol affordances
+   such as CoAP or HTTP; they enhance the expressiveness of the model
+   for tooling, documentation, and system integration purposes.
+
+4.2.  Run-Time Context Messages
+
+   During operation, some contextual values change (e.g., a device is
+   moved to a new room) or must be declared for audit purposes.  To
+   communicate those facts without re-classifying them as affordances,
+   three transport-agnostic JSON envelopes for run-time context exchange
+   are defined:
+
+   *  contextSnapshot: conveys the full, current set of non-affordance
+      fields (such as installation information or geographic
+      coordinates) and is typically sent at boot, on request, or during
+      periodic audits.
+
+   *  identityManifest: declares immutable identity data (model,
+      manufacturer, capability tags, certifications) and is normally
+      issued once at commissioning or whenever a permanent attribute is
+      added, for example after a firmware upgrade that introduces a new
+      capability.
+
+   *  contextPatch: transmits only the keys that have changed since the
+      last snapshot, minimizing bandwidth when a device is moved, re-
+      mounted, or otherwise updated in context.
+
+   Every envelope carries a thingId and a timestamp.
+
+4.2.1.  contextSnapshot Message
+
+   The contextSnapshot message provides a complete view of a device's
+   static non-affordance metadata.  This message is typically sent upon
+   onboarding or registration to inform the system of all contextual
+   properties.
+
+   {
+     "thingId": "envSensor:abc123",
+     "timestamp": "2025-07-01T12:00:00Z",
+     "contextSnapshot": {
+       "installationInfo": {
+         "floor": 3,
+         "mountType": "ceiling",
+         "indoorOutdoor": "indoor"
+       }
+     }
+   }
+
+                Figure 6: Example of contextSnapshot Message
+
+4.2.2.  identityManifest Message
+
+   The identityManifest message describes immutable identity attributes
+   of a device or asset.  It can be used for device authentication or
+   registry lookup.
+
+   {
+     "thingId": "medDevice:unit42",
+     "timestamp": "2025-07-01T08:15:00Z",
+     "identityManifest": {
+       "manufacturer": "HealthTech Inc.",
+       "model": "HT-2025-M",
+       "firmwareVersion": "1.4.3",
+       "certifications": [
+         { "scheme": "FDA", "certId": "FDA123456", "region": "US" },
+         { "scheme": "CE", "certId": "CE987654", "region": "EU" }
+       ]
+     }
+   }
+
+               Figure 7: Example of identityManifest Message
+
+4.2.3.  contextPatch Message
+
+   The contextPatch message reports changes to specific non-affordance
+   attributes.  This allows for efficient partial updates without
+   resending the entire snapshot.
+
+   {
+     "thingId": "assetContainer:box001",
+     "timestamp": "2025-07-01T14:23:00Z",
+     "contextPatch": {
+       "location": {
+         "lat": 37.5665,
+         "lon": 126.9780
+       }
+     }
+   }
+
+                 Figure 8: Example of contextPatch Message
+
+5.  Security Considerations
+
+   TBD
+
+6.  IANA Considerations
+
+   TBD
+
+7.  Normative References
+
+   [I-D.ietf-asdf-sdftype-link]
+              Bormann, C. and A. Keränen, "An sdfType for Links", Work
+              in Progress, Internet-Draft, draft-ietf-asdf-sdftype-link-
+              02, 23 June 2026, <https://datatracker.ietf.org/doc/html/
+              draft-ietf-asdf-sdftype-link-02>.
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
@@ -102,12 +833,59 @@ Table of Contents
               2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
               May 2017, <https://www.rfc-editor.org/rfc/rfc8174>.
 
-Acknowledgments
+   [RFC8288]  Nottingham, M., "Web Linking", RFC 8288,
+              DOI 10.17487/RFC8288, October 2017,
+              <https://www.rfc-editor.org/rfc/rfc8288>.
 
-   TODO acknowledge.
+   [RFC9880]  Koster, M., Ed., Bormann, C., Ed., and A. Keränen,
+              "Semantic Definition Format (SDF) for Data and
+              Interactions of Things", RFC 9880, DOI 10.17487/RFC9880,
+              January 2026, <https://www.rfc-editor.org/rfc/rfc9880>.
 
-Author's Address
+8.  Informative References
 
-   Your Name Here
-   Your Organization Here
-   Email: your.email@example.com
+   [I-D.ietf-asdf-digital-twin]
+              Lee, H., Ed. and J. Hong, "Semantic Definition Format
+              (SDF) Modeling for Digital Twin", Work in Progress,
+              Internet-Draft, draft-ietf-asdf-digital-twin-05, 14
+              September 2026, <https://datatracker.ietf.org/doc/html/
+              draft-ietf-asdf-digital-twin-05>.
+
+   [I-D.ietf-asdf-instance-information]
+              Romann, J. and C. Bormann, "Instance Information for SDF",
+              Work in Progress, Internet-Draft, draft-ietf-asdf-
+              instance-information-02, 18 February 2026,
+              <https://datatracker.ietf.org/doc/html/draft-ietf-asdf-
+              instance-information-02>.
+
+   [I-D.ietf-asdf-sdf-mapping]
+              Bormann, C. and J. Romann, "Semantic Definition Format
+              (SDF): Supplements", Work in Progress, Internet-Draft,
+              draft-ietf-asdf-sdf-mapping-01, 18 February 2026,
+              <https://datatracker.ietf.org/doc/html/draft-ietf-asdf-
+              sdf-mapping-01>.
+
+   [RFC6690]  Shelby, Z., "Constrained RESTful Environments (CoRE) Link
+              Format", RFC 6690, DOI 10.17487/RFC6690, August 2012,
+              <https://www.rfc-editor.org/rfc/rfc6690>.
+
+Authors' Addresses
+
+   Jungha Hong (editor)
+   Electronics and Telecommunications Research Institute
+   218 Gajeong-ro, Yuseong-gu
+   Daejeon
+   34129
+   South Korea
+   Phone: +82 42 860 0926
+   Email: jhong@etri.re.kr
+
+
+   Hyunjeong Lee
+   Electronics and Telecommunications Research Institute
+   218 Gajeong-ro, Yuseong-gu
+   Daejeon
+   34129
+   South Korea
+   Phone: +82 42 860 1213
+   Email: hjlee294@etri.re.kr
