@@ -9,10 +9,10 @@
 
 ]>
 
-<rfc xmlns:xi="http://www.w3.org/2001/XInclude" version="3" ipr="trust200902" docName="draft-ietf-asdf-sdf-nonaffordance-05" category="std" submissionType="IETF" tocInclude="true" sortRefs="true" symRefs="true">
+<rfc xmlns:xi="http://www.w3.org/2001/XInclude" version="3" ipr="trust200902" docName="draft-ietf-asdf-sdf-nonaffordance-latest" category="std" submissionType="IETF" tocInclude="true" sortRefs="true" symRefs="true">
   <front>
     <title abbrev="SDF Extension for Non-Affordance Info">Semantic Definition Format (SDF) Extension for Non-Affordance Information</title>
-    <seriesInfo name="Internet-Draft" value="draft-ietf-asdf-sdf-nonaffordance-05"/>
+    <seriesInfo name="Internet-Draft" value="draft-ietf-asdf-sdf-nonaffordance-latest"/>
 
     <author fullname="Jungha Hong" role="editor" initials="J." surname="Hong">
       <organization abbrev="ETRI">Electronics and Telecommunications Research Institute</organization>
